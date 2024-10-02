@@ -77,12 +77,40 @@ class _HomePageState extends State<HomePage> {
     return text.replaceAll('\r\n', '\n'); // Replace CRLF with LF
   }
 
+  // Function to remove quotes that are substrings of others
+  List<String> filterSubstringQuotes(Iterable<String> quotes) {
+    List<String> filteredQuotes = [];
+
+    for (var quote in quotes) {
+      bool isSubstring = false;
+
+      // Check if the current quote is a substring of any already added quote
+      for (var existingQuote in filteredQuotes) {
+        if (existingQuote.startsWith(quote)) {
+          isSubstring = true;
+          break;
+        } else if (quote.startsWith(existingQuote)) {
+          // If the current quote contains the existing one, replace it
+          filteredQuotes.remove(existingQuote);
+          break;
+        }
+      }
+
+      if (!isSubstring) {
+        filteredQuotes.add(quote);
+      }
+    }
+
+    return filteredQuotes;
+  }
+
   void _downloadAsZip(Map<String, LinkedHashSet<String>> bookHighlights) {
     // Create a ZIP encoder
     final archive = Archive();
 
     // Add each markdown file to the archive
-    bookHighlights.forEach((bookName, quotes) {
+    bookHighlights.forEach((bookName, quotesSet) {
+      List<String> quotes = filterSubstringQuotes(quotesSet);
       String fileName = "${bookName.replaceAll(RegExp(r'[<>:\"/\\|?*]'), '_')}.md";
       String markdownContent = quotes.map((quote) => "- $quote").join("\n\n");
 
