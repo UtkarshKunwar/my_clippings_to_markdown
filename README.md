@@ -1,6 +1,6 @@
 # my_clippings_to_markdown
 
-v0.1.0
+v0.1.1
 
 [Live on Github Pages here.](https://utkarshkunwar.github.io/my_clippings_to_markdown)
 
