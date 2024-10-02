@@ -1,0 +1,18 @@
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.0.0"
+version_files = [
+    "README.md",
+    "pubspec.yaml",
+]
+version_scheme = "semver"
+tag_format = "v$version"
+bump_message = "bump: v$current_version → v$new_version [skip-ci]"
+allowed_prefixes = [
+    "Merge",
+    "Revert",
+    "Pull request",
+    "fixup!",
+    "squash!",
+    "review",
+]
