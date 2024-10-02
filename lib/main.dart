@@ -1,4 +1,5 @@
 import 'dart:html' as html;
+import 'dart:collection';
 import 'package:flutter/services.dart';
 import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
@@ -76,7 +77,7 @@ class _HomePageState extends State<HomePage> {
     return text.replaceAll('\r\n', '\n'); // Replace CRLF with LF
   }
 
-  void _downloadAsZip(Map<String, List<String>> bookHighlights) {
+  void _downloadAsZip(Map<String, LinkedHashSet<String>> bookHighlights) {
     // Create a ZIP encoder
     final archive = Archive();
 
@@ -131,7 +132,7 @@ class _HomePageState extends State<HomePage> {
     log("Total highlights: $n_highlights");
 
     // A map to store quotes for each book
-    Map<String, List<String>> bookHighlights = {};
+    Map<String, LinkedHashSet<String>> bookHighlights = {};
     Set<String> books = {};
 
     for (String highlight in highlights) {
@@ -159,11 +160,10 @@ class _HomePageState extends State<HomePage> {
       String highlightedQuote = _removeBom(quoteMatch.group(1)?.trim() ?? "");
 
       // Add the quote to the corresponding book in the map
-      if (bookHighlights.containsKey(bookName) && highlightedQuote != "") {
-        bookHighlights[bookName]!.add(highlightedQuote);
-      } else {
-        bookHighlights[bookName] = [highlightedQuote];
+      if (!(bookHighlights.containsKey(bookName) && highlightedQuote != "")) {
+        bookHighlights[bookName] = new LinkedHashSet<String>();
       }
+      bookHighlights[bookName]?.add(highlightedQuote);
     }
 
     int n_found_books = books.length;
