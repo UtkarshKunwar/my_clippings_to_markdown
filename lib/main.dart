@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
     bookHighlights.forEach((bookName, quotesSet) {
       List<String> quotes = filterSubstringQuotes(quotesSet);
       String fileName = "${bookName.replaceAll(RegExp(r'[<>:\"/\\|?*]'), '_')}.md";
-      String markdownContent = quotes.map((quote) => "- $quote").join("\n\n");
+      String markdownContent = quotes.map((quote) => "1. $quote").join("\n\n");
 
       // Convert markdown content to bytes and add to the archive
       List<int> contentBytes = Uint8List.fromList(markdownContent.codeUnits);
